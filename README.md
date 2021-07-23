@@ -159,6 +159,8 @@ http aa9c6a809425d45b69b139edc5237d53-1942883713.ap-northeast-2.elb.amazonaws.co
 |resort| 리조트 관리 |8082|http://localhost:8082/resorts|
 |mypage| 예약내역 조회 |8083|http://localhost:8083/mypages|
 |gateway| gateway |8088|http://localhost:8088|
+|payment| 결제관리 |8084|http://localhost:8084|
+|voucher| 바우처관리 |8085|http://localhost:8085|
 
 ## Gateway 적용
 - API GateWay를 통하여 마이크로 서비스들의 진입점을 통일할 수 있다. 
@@ -187,6 +189,14 @@ spring:
           uri: http://localhost:8083
           predicates:
             - Path= /myPages/**
+        - id: payment
+          uri: http://localhost:8084
+          predicates:
+            - Path=/payments/** 
+        - id: voucher
+          uri: http://localhost:8085
+          predicates:
+            - Path=/vouchers/**             
       globalcors:
         corsConfigurations:
           '[/**]':
@@ -215,6 +225,14 @@ spring:
           uri: http://mypage:8080
           predicates:
             - Path= /myPages/**
+        - id: payment
+          uri: http://payment:8080
+          predicates:
+            - Path=/payments/** 
+        - id: voucher
+          uri: http://voucher:8080
+          predicates:
+            - Path=/vouchers/**             
       globalcors:
         corsConfigurations:
           '[/**]':
