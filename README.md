@@ -1,5 +1,5 @@
 # 휴양소_예약시스템_V2
-<img width="994" alt="image" src="https://user-images.githubusercontent.com/85722729/125247482-f6e26e00-e32d-11eb-8ccd-cf83ee9cae62.jpg">
+<img width="994" alt="image" src="https://user-images.githubusercontent.com/85722851/126726833-ec47317d-e76d-46e9-a0d2-734749ada424.jpeg">
 
 # Table of contents
 - [휴양소_예약시스템](#---)
