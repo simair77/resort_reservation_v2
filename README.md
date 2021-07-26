@@ -362,7 +362,7 @@ public class Reservation {
     }
 }
 ```
-- 결제시스템과 마이페이지시스템에서는 예약완료 이벤트에 대해서 이를 수신하여 자신의 정책을 처리하도록 PolicyHandler 를 구현한다
+- 결제시스템, 바우처시스템, 마이페이지시스템에서는 예약완료 이벤트에 대해서 이를 수신하여 자신의 정책을 처리하도록 PolicyHandler 를 구현한다
 
 결제시스템
 ```java
@@ -458,6 +458,8 @@ http localhost:8081/reservations #예약 정상 처리 확인
 
 4.마이페이지확인
 http localhost:8083/myPages #정상적으로 마이페이지에서 예약 이력이 확인 됨
+http localhost:8084/payments #정상적으로 결제요청이 들어온 것이 확인 됨
+
 
 ```
 
@@ -483,7 +485,7 @@ kubectl apply -f resort/kubernetes/deployment.yml #AWS deploy 수행
 kubectl apply -f resort/kubernetes/service.yaml.  #AWS service 등록
 
 ```
-- Docker Hub Image
+- AWS ECR Repository
 ![image](https://user-images.githubusercontent.com/85722851/126922036-56c84c59-19ee-4573-b880-b87a41fc304c.png)
 
 - 최종 Deploy완료
