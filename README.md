@@ -157,8 +157,8 @@ http PATCH a9027a71f48dc43e4b8908333d767493-841073223.ap-southeast-1.elb.amazona
 |resort| 리조트 관리 |8082|http://localhost:8082/resorts|
 |mypage| 예약내역 조회 |8083|http://localhost:8083/mypages|
 |gateway| gateway |8088|http://localhost:8088|
-|payment| 결제관리 |8084|http://localhost:8084|
-|voucher| 바우처관리 |8085|http://localhost:8085|
+|payment| 결제관리 |8084|http://localhost:8084/payments|
+|voucher| 바우처관리 |8085|http://localhost:8085/vouchers|
 
 ## Gateway 적용
 - API GateWay를 통하여 마이크로 서비스들의 진입점을 통일할 수 있다. 
