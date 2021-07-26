@@ -94,10 +94,8 @@
   - General : payment, voucher
 
 ## 헥사고날 아키텍처 다이어그램 도출
-    
-![image](https://user-images.githubusercontent.com/85722729/125151798-bcd56880-e183-11eb-876b-074a02d94116.png)
 
-
+![image](https://user-images.githubusercontent.com/85722851/126945973-a2450154-cf8d-4c00-b7c0-f482fdbf9a23.png)
 
     - Chris Richardson, MSA Patterns 참고하여 Inbound adaptor와 Outbound adaptor를 구분함
     - 호출관계에서 PubSub 과 Req/Resp 를 구분함
@@ -245,7 +243,7 @@ server:
   port: 8080
 ```
 ## 폴리글랏 퍼시스턴스
-- CQRS 를 위한 mypage 서비스만 DB를 구분하여 적용함. 인메모리 DB인 hsqldb 사용.
+- CQRS 를 위한 mypage, voucher 서비스를 DB를 구분하여 적용함. 인메모리 DB인 hsqldb 사용.
 ```
 - maypage 서비스의 pom.xml
 <!-- 
