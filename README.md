@@ -340,13 +340,9 @@ public interface ResortService {
 ```
 
 - 동기식 호출에서는 호출 시간에 따른 타임 커플링이 발생하며, 시스템이 장애로 예약을 못받는다는 것을 확인
-<img width="1019" alt="image" src="https://user-images.githubusercontent.com/85722851/125232225-2174fc80-e317-11eb-9186-98995cf27f97.png">
-
+![image](https://user-images.githubusercontent.com/85722851/126930974-670baf83-97a8-470f-83da-e66138a2050b.png)
 
 - 또한 과도한 요청시에 서비스 장애가 도미노 처럼 벌어질 수 있다. (서킷브레이커, 폴백 처리는 운영단계에서 설명한다.)
-
-
-
 
 ## 비동기식 호출 / 시간적 디커플링 / 장애격리 / 최종 (Eventual) 일관성 테스트
 - 예약이 이루어진 후에 결제시스템에 결제요청과 마이페이지시스템에 이력을 보내는 행위는 동기식이 아니라 비 동기식으로 처리하여 예약이 블로킹 되지 않아도록 처리한다.
@@ -368,7 +364,7 @@ public class Reservation {
 ```
 - 결제시스템과 마이페이지시스템에서는 예약완료 이벤트에 대해서 이를 수신하여 자신의 정책을 처리하도록 PolicyHandler 를 구현한다
 
-결제시스템(팀과제에서는 미구현)
+결제시스템
 ```java
 
 @Service
@@ -379,8 +375,36 @@ public class PolicyHandler{
     public void wheneverReservationRegistered_PaymentRequestPolicy(@Payload ReservationRegistered reservationRegistered){
 
         if(!reservationRegistered.validate()) return;
+
         System.out.println("\n\n##### listener PaymentRequestPolicy : " + reservationRegistered.toJson() + "\n\n");
-        // Logic 구성 // 
+
+        Payment payment = new Payment();
+        payment.setReservId(reservationRegistered.getId());
+        payment.setResortPrice(reservationRegistered.getResortPrice());
+        payment.setReservStatus(reservationRegistered.getResortStatus());
+        paymentRepository.save(payment);
+        
+    }
+}
+
+바우처 시스템
+```java
+@Service
+public class PolicyHandler{
+    @Autowired VoucherRepository voucherRepository;
+
+    @StreamListener(KafkaProcessor.INPUT)
+    public void wheneverPaymentApproved_VoucherRequestPolicy(@Payload PaymentApproved paymentApproved){
+
+        if(!paymentApproved.validate()) return;
+
+        System.out.println("\n\n##### listener VoucherRequestPolicy : " + paymentApproved.toJson() + "\n\n");
+
+        Voucher voucher = new Voucher();
+        voucher.setReservId(paymentApproved.getReservId());
+        voucher.setVoucherStatus(paymentApproved.getReservStatus());
+        voucherRepository.save(voucher);
+
     }
 }
 ```
