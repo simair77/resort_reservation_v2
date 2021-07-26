@@ -111,44 +111,42 @@
 ## 시나리오 흐름 테스트
 1. 휴양소 관리자는 휴양소를 등록한다.
 ```sh
-http aa9c6a809425d45b69b139edc5237d53-1942883713.ap-northeast-2.elb.amazonaws.com:8080/resorts resortName="Jeju" resortType="Hotel" resortPrice=100000 resortStatus="Available" resortPeriod="7/23~25"
-http aa9c6a809425d45b69b139edc5237d53-1942883713.ap-northeast-2.elb.amazonaws.com:8080/resorts resortName="Seoul" resortType="Hotel" resortPrice=100000 resortStatus="Available" resortPeriod="7/23~25"
-http aa9c6a809425d45b69b139edc5237d53-1942883713.ap-northeast-2.elb.amazonaws.com:8080/resorts
+http a9027a71f48dc43e4b8908333d767493-841073223.ap-southeast-1.elb.amazonaws.com:8080/resorts resortName="Jeju" resortType="Hotel" resortPrice=100000 resortStatus="Available" resortPeriod="7/23~25"
+http a9027a71f48dc43e4b8908333d767493-841073223.ap-southeast-1.elb.amazonaws.com:8080/resorts resortName="Seoul" resortType="Hotel" resortPrice=100000 resortStatus="Available" resortPeriod="7/23~25"
 ```
-<img width="992" alt="image" src="https://user-images.githubusercontent.com/85722851/125231090-1620d180-e315-11eb-9300-1beefa54e09c.png">
+![image](https://user-images.githubusercontent.com/85722851/126925365-a6e1e94d-ce79-4fe2-b288-2de573220bca.png)
 
-2. 고객이 휴양소를 선택하여 예약한다.
+
+2. 고객이 휴양소를 선택하여 예약한다 --> 리조트 상태가 예약불가상태로, 결재상태는 대기 상태로 입력이 된것을 확인할 수 있다.
 ```sh
-http aa9c6a809425d45b69b139edc5237d53-1942883713.ap-northeast-2.elb.amazonaws.com:8080/reservations resortId=2 memberName="sim sang joon"
+http a9027a71f48dc43e4b8908333d767493-841073223.ap-southeast-1.elb.amazonaws.com:8080/reservations resortId=2 memberName="sim sang joon"
 ```
-<img width="993" alt="image" src="https://user-images.githubusercontent.com/85722851/125231135-2769de00-e315-11eb-8b6e-f0e4711c2760.png">
+![image](https://user-images.githubusercontent.com/85722851/126925550-5fe6be3e-30a9-444b-81e1-c74b4c55645b.png)
+![image](https://user-images.githubusercontent.com/85722851/126925606-7eb50020-429f-46cc-9bf3-9a2554edab05.png)
 
 
-3. 예약이 확정되어 휴양소는 예약불가 상태로 바뀐다.
+3. 예약이 완료되면 결재를 진행한다. --> 결재가 완료되면 바우처 발급 대기를 상태가 된다.
 ```sh
-http aa9c6a809425d45b69b139edc5237d53-1942883713.ap-northeast-2.elb.amazonaws.com:8080/resorts/2
+http PATCH a9027a71f48dc43e4b8908333d767493-841073223.ap-southeast-1.elb.amazonaws.com:8080/payments/1 reservStatus="Confirmed"
 ```
-<img width="992" alt="image" src="https://user-images.githubusercontent.com/85722851/125231217-4a948d80-e315-11eb-923d-c257731b5d44.png">
+![image](https://user-images.githubusercontent.com/85722851/126925934-dd944d8f-9229-4655-be11-ba3c942736c7.png)
+![image](https://user-images.githubusercontent.com/85722851/126925842-7075d806-e1ae-41c6-a155-592ef8223e4d.png)
 
 
-4. 고객이 확정된 예약을 취소할 수 있다.
+4. 담당자가 바우처를 전송한다. --> 바우처 상태를 Mypage에서 확인할 수 있다.
 ```sh
-http PATCH aa9c6a809425d45b69b139edc5237d53-1942883713.ap-northeast-2.elb.amazonaws.com:8080/reservations/1 resortStatus="Cancelled"
+http PATCH a9027a71f48dc43e4b8908333d767493-841073223.ap-southeast-1.elb.amazonaws.com:8080/vouchers/1 voucherStatus="Voucher Send" voucherCode="R20210729"
 ```
-<img width="994" alt="image" src="https://user-images.githubusercontent.com/85722851/125231248-5c763080-e315-11eb-9f58-0637fed3d099.png">
+![image](https://user-images.githubusercontent.com/85722851/126926105-4b1410ab-39ab-4b03-87e7-43512c8435b9.png)
+![image](https://user-images.githubusercontent.com/85722851/126926136-0da12677-d2f6-4726-96b3-dcbcf3cc7c6e.png)
 
-
-5. 휴양소는 예약 가능상태로 바뀐다.
+5. 고객이 확정된 예약을 취소할 수 있다. --> Mypage의 상태가 변경되고 리조트는 다시 예약 가능 상태로 변경된다.
 ```sh
-http aa9c6a809425d45b69b139edc5237d53-1942883713.ap-northeast-2.elb.amazonaws.com:8080/resorts/2
+http PATCH a9027a71f48dc43e4b8908333d767493-841073223.ap-southeast-1.elb.amazonaws.com:8080/reservations/1 resortStatus="Cancelled"
 ```
-<img width="994" alt="image" src="https://user-images.githubusercontent.com/85722851/125231271-6c8e1000-e315-11eb-92e2-bcb2897f6449.png">
+![image](https://user-images.githubusercontent.com/85722851/126926337-064e6aa0-aa2c-4b19-846e-376abfc6b645.png)
+![image](https://user-images.githubusercontent.com/85722851/126926374-29d856b3-ce02-449a-80d3-249d236ab976.png)
 
-6. 고객은 휴양소 예약 정보를 확인 할 수 있다.
-```sh
-http aa9c6a809425d45b69b139edc5237d53-1942883713.ap-northeast-2.elb.amazonaws.com:8080/myPages
-```
-<img width="992" alt="image" src="https://user-images.githubusercontent.com/85722851/125231312-7c0d5900-e315-11eb-93bf-af4f025fc3d3.png">
 
 ## DDD 의 적용
 - 위 이벤트 스토밍을 통해 식별된 Micro Service 전체 5개 중 3개를 구현하였으며 그 중 mypage는 CQRS를 위한 서비스이다.
